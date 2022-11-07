@@ -1,0 +1,35 @@
+<div class="topNav">
+  <mat-paginator [length]="100" [pageSize]="pageSize" [pageSizeOptions]="pageSizeArray" class="mat-paginator-container" (page)="onChangePage($event)"></mat-paginator>
+  <button type="button" class="firstBtn" mat-flat-button color="primary" (click)="addDish()">Add Dish</button>
+</div>
+<div class="dishList">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="sno">
+      <th mat-header-cell *matHeaderCellDef> S.No </th>
+      <td mat-cell *matCellDef="let dish; let i=index"> {{i+1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let dish"> {{dish.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let dish"> {{dish.price}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <tr>
+        <td mat-cell *matCellDef="let dish" class="btnGroup">
+          <button type="button" mat-button color="primary" (click)="editDish(dish.id)">Edit</button> |
+          <button type="button" mat-button color="warn" (click)="deleteDish(dish.id)">Delete</button>
+      </tr>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let dish; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

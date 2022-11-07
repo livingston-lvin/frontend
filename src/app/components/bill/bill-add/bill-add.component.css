@@ -1,0 +1,22 @@
+.ingredientAddForm{
+  width: 80%;
+  margin: 50px auto;
+  border: 2px solid grey;
+  padding: 50px;
+}
+
+table{
+  width: 100%;
+}
+
+.firstBtn{
+  margin-bottom: 20px;
+}
+
+.ingBtn{
+  margin-bottom: 20px;
+}
+
+.totalAmt{
+margin-left: 205%;
+}

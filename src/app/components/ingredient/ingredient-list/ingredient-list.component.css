@@ -1,0 +1,36 @@
+.firstBtn {
+  width: 10%;
+  margin: 50px 35% 0 65%;
+}
+
+table {
+  width: 50%;
+  margin: 20px auto;
+}
+
+th.mat-header-cell {
+  text-align: center;
+}
+
+
+tr.mat-row,
+tr.mat-footer-row {
+  text-align: center;
+}
+
+.actionBtn {
+  margin-right: 20px;
+}
+
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type,
+td.mat-footer-cell:last-of-type {
+  padding-right: 0;
+  width: 250px;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+  padding-left: 0;
+}

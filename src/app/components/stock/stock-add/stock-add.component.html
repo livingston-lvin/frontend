@@ -1,0 +1,29 @@
+<form class="stockAddForm" (ngSubmit)="save()" [formGroup]="form">
+  <table>
+    <tr>
+      <h1>Add New Stock</h1>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Fried rice" formControlName="name">
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input matInput placeholder="0.00" formControlName="quantity" (keypress)="numeric($event)">
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button type="submit" mat-flat-button color="primary" [disabled]="validate() || loading">{{loading ?"Loading...": "Save"
+          }}</button>
+      </td>
+    </tr>
+  </table>
+</form>

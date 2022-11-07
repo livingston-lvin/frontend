@@ -1,0 +1,40 @@
+<form class="dishAddForm" (ngSubmit)="save()" [formGroup]="form">
+  <table>
+    <tr>
+      <h1>Add New Dish</h1>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Fried rice" formControlName="name">
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Price</mat-label>
+          <input matInput placeholder="0.00" formControlName="price" (keypress)="isDecimal($event)">
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Image</mat-label>
+          <ngx-mat-file-input #file formControlName="image" placeholder="Select Image"></ngx-mat-file-input>
+        </mat-form-field>
+      </td>
+      <td>
+        <button type="button" class="firstBtn" mat-flat-button color="primary" (click)="browse(file)">Browse</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button type="submit" mat-flat-button color="primary" [disabled]="validate() || loading">{{loading ?"Loading...": "Save"
+          }}</button>
+      </td>
+    </tr>
+  </table>
+</form>

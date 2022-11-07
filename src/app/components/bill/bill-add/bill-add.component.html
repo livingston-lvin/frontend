@@ -1,0 +1,66 @@
+<form class="ingredientAddForm" (ngSubmit)="save()">
+  <table>
+    <tr>
+      <h1>Add Bill</h1>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Table No</mat-label>
+          <input name="tblNo" matInput placeholder="0" (keypress)="numeric($event)" [(ngModel)]="tblNo">
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Dish</mat-label>
+          <input #ref name="stockName" matInput [(ngModel)]="selectedDish" [matAutocomplete]="asd"
+            [formControl]="searchDishControl" placeholder="Fried rice">
+          <button type="button" *ngIf="selectedDish" matSuffix mat-icon-button aria-label="Clear"
+            (click)="clearDishSelection()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #asd="matAutocomplete" [displayWith]="displayWith">
+            <ng-container *ngIf="!loading">
+              <mat-option *ngFor="let dish of filteredDish" [value]="dish">{{dish.name}}</mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Price</mat-label>
+          <input name="price" matInput placeholder="0" (keypress)="decimal($event)" (keyup)="calulateAmount()" [(ngModel)]="price">
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input name="quantity" matInput placeholder="0" (keypress)="numeric($event)" (keyup)="calulateAmount()" [(ngModel)]="quantity">
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Amount</mat-label>
+          <input name="amount" matInput placeholder="0" (keypress)="numeric($event)" readonly [(ngModel)]="amount">
+        </mat-form-field>
+      </td>
+      <td>
+        <button type="button" mat-flat-button color="primary" class="ingBtn" (click)="addRow()">Add
+          Item</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button type="submit" mat-flat-button color="primary">Save</button>
+      </td>
+      <td>
+        <mat-form-field appearance="outline" class="totalAmt">
+          <mat-label>Total Amount</mat-label>
+          <input name="totalAmount" matInput placeholder="0" (keypress)="decimal($event)" readonly [(ngModel)]="totalAmount">
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
+</form>

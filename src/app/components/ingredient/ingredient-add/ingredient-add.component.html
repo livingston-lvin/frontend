@@ -1,0 +1,59 @@
+<form class="ingredientAddForm" (ngSubmit)="save()">
+  <table>
+    <tr>
+      <h1>Add New Ingredient</h1>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Dish</mat-label>
+          <input name="dishName" matInput [(ngModel)]="selectedDish" [matAutocomplete]="dishData" [formControl]="searchDishControl"
+            placeholder="Fried rice">
+          <button type="button" *ngIf="selectedDish" matSuffix mat-icon-button aria-label="Clear"
+            (click)="clearDishSelection()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #dishData="matAutocomplete" [displayWith]="displayWith">
+            <ng-container *ngIf="!loading">
+              <mat-option *ngFor="let dish of filteredDish" [value]="dish">{{dish.name}}</mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr *ngFor="let row of rowList;let i=index">
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Stock</mat-label>
+          <input #ref name="stockName" matInput [(ngModel)]="selectedStock" [matAutocomplete]="asd"
+            [formControl]="searchStockControl" placeholder="Vegetables">
+          <button type="button" *ngIf="selectedStock" matSuffix mat-icon-button aria-label="Clear"
+            (click)="clearStockSelection()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #asd="matAutocomplete" [displayWith]="displayWith">
+            <ng-container *ngIf="!loading">
+              <mat-option *ngFor="let stock of filteredStock" (onSelectionChange)="onSelectedStock($event)"
+                [value]="stock">{{stock.name}}</mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>Qty Used</mat-label>
+          <input name="quantity" matInput placeholder="0" (keypress)="numeric($event)" [(ngModel)]="qtyUsed">
+        </mat-form-field>
+      </td>
+      <td>
+        <button type="button" mat-flat-button color="primary" class="ingBtn" (click)="addRow()">Add
+          Ingredient</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button type="submit" mat-flat-button color="primary">Save</button>
+      </td>
+    </tr>
+  </table>
+</form>
