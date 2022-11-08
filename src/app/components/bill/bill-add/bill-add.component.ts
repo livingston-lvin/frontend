@@ -1,16 +1,12 @@
 import { Bill } from './../../../utils/interface/bill.interface';
 import { BillService } from './../../../utils/api/bill/bill.service';
-import { IngredientService } from './../../../utils/api/ingredient/ingredient.service';
-import { Ingredient } from './../../../utils/interface/ingredient.interface';
 import { DishService } from './../../../utils/api/dish/dish.service';
 import { Dish } from './../../../utils/interface/dish.interface';
-import { Stock } from './../../../utils/interface/stock.interface';
-import { StockService } from './../../../utils/api/stock/stock.service';
 import { isNumeric, isNumericDecimal } from './../../../utils/helper/helper';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
+import { filter,  debounceTime, tap, switchMap } from 'rxjs';
 import { MatOptionSelectionChange } from '@angular/material/core';
 @Component({
   selector: 'app-bill-add',

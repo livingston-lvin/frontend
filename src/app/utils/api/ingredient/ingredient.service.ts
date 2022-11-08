@@ -15,7 +15,7 @@ export class IngredientService {
     return this.http.get<any>(`${this.url}/${ingredientId}`);
   }
 
-  addIngredient(ingredient:Ingredient): Observable<any> {
+  addIngredient(ingredient:any): Observable<any> {
     return this.http.post<any>(this.url, ingredient);
   }
 

@@ -39,4 +39,8 @@ export class DishService {
     return this.http.get<any>(`${this.url}/get/${offset}/${size}`);
   }
 
+  getDishCount(): Observable<number> {
+    return this.http.get<number>(`${this.url}/getCount`);
+  }
+
 }

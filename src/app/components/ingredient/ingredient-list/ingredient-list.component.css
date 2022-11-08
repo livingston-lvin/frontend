@@ -1,6 +1,19 @@
 .firstBtn {
-  width: 10%;
-  margin: 50px 35% 0 65%;
+  height: 40px;
+  padding-right: 30px;
+}
+
+.topNav {
+  display: flex;
+  width: 50%;
+  margin: 20px auto;
+}
+
+.mat-paginator-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap-reverse;
 }
 
 table {

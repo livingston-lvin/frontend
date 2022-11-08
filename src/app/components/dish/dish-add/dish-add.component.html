@@ -21,9 +21,10 @@
     </tr>
     <tr>
       <td>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" (change)="clearImage()" >
           <mat-label>Image</mat-label>
-          <ngx-mat-file-input #file formControlName="image" placeholder="Select Image"></ngx-mat-file-input>
+          <ngx-mat-file-input #file formControlName="image" placeholder="Select Image" ></ngx-mat-file-input>
+          <mat-hint class="imgTxt">{{img}}</mat-hint>
         </mat-form-field>
       </td>
       <td>

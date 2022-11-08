@@ -1,5 +1,5 @@
 .ingredientAddForm{
-  width: 45%;
+  width: 35%;
   margin: 50px auto;
   border: 2px solid grey;
   padding: 50px;
@@ -13,6 +13,11 @@ table{
   margin-bottom: 20px;
 }
 
-.ingBtn{
-  margin-bottom: 20px;
+tr .actionRow{
+  display: flex;
+  justify-content: space-between;
+}
+
+.saveBtn{
+  width: 100px;
 }

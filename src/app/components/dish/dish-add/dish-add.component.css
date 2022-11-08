@@ -1,14 +1,21 @@
-.dishAddForm{
+.dishAddForm {
   width: 30%;
   margin: 50px auto;
   border: 2px solid grey;
   padding: 50px;
 }
 
-table{
+table {
   width: 100%;
 }
 
-.firstBtn{
+.firstBtn {
+  margin-bottom: 20px;
+}
+
+.mat-hint {
+  color: black;
+  font-style: italic;
+  font-size: 13px;
   margin-bottom: 20px;
 }

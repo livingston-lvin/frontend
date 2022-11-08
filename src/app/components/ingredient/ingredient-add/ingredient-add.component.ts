@@ -1,13 +1,13 @@
 import { IngredientService } from './../../../utils/api/ingredient/ingredient.service';
-import { Ingredient } from './../../../utils/interface/ingredient.interface';
+import { Ingredient, Item } from './../../../utils/interface/ingredient.interface';
 import { DishService } from './../../../utils/api/dish/dish.service';
 import { Dish } from './../../../utils/interface/dish.interface';
 import { Stock } from './../../../utils/interface/stock.interface';
 import { StockService } from './../../../utils/api/stock/stock.service';
 import { isNumeric } from './../../../utils/helper/helper';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, TitleStrategy } from '@angular/router';
 import { filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
 import { MatOptionSelectionChange } from '@angular/material/core';
 @Component({
@@ -15,7 +15,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
   templateUrl: './ingredient-add.component.html',
   styleUrls: ['./ingredient-add.component.css']
 })
-export class IngredientAddComponent implements OnInit {
+export class IngredientAddComponent implements OnInit, AfterViewInit {
 
   selectedDish: any = "";
   searchDishControl = new FormControl('');
@@ -35,34 +35,49 @@ export class IngredientAddComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private stockService: StockService, private dishService: DishService,
     private ingredientService: IngredientService) {
-    this.rowList.push({ stock: { name: '', quantity: 0 }, quantityUsed: undefined })
+
     this.ingredientId = this.route.snapshot.params['ingredientId']
   }
-
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.searchDishListener();
     this.searchStockListener();
+  }
+
+
+
+  ngOnInit(): void {
 
     if (this.ingredientId) {
-      this.ingredientService.getIngredient(this.ingredientId).subscribe(
-        response => {
-          this.selectedDish = response.dish;
-          this.selectedStock = response.item[0].stock;
-          this.qtyUsed = response.item[0].quantityUsed;
-        },
-        error => console.log(error),
-        () => this.loading = false,
-      );
+      this.pathchFormValue();
+    } else {
+      this.rowList.push({ stock: { id: undefined, name: '', quantity: 0 }, quantityUsed: undefined },
+        { stock: { id: undefined, name: '', quantity: 0 }, quantityUsed: undefined },
+        { stock: { id: undefined, name: '', quantity: 0 }, quantityUsed: undefined })
     }
 
+  }
+
+  pathchFormValue() {
+    this.rowList = [];
+    this.ingredientService.getIngredient(this.ingredientId).subscribe(response => {
+      this.selectedDish = response.dish;
+      let items: any[] = response.item;
+      let rows = [];
+      for (let i = 0; i < items.length; i++) {
+        let stock = items[i].stock;
+        let qty = items[i].quantityUsed;
+        rows.push({ stock, quantityUsed:qty });
+      }
+      this.rowList=[...items];
+      console.log(this.rowList)
+    })
   }
 
   onSelectedStock(event: MatOptionSelectionChange) {
     // console.log(event)
   }
 
-  addRow() {
-  }
+
 
   searchDishListener() {
     this.searchDishControl.valueChanges
@@ -76,12 +91,15 @@ export class IngredientAddComponent implements OnInit {
       });
   }
 
+
+
   searchStockListener() {
     this.searchStockControl.valueChanges
       .pipe(
         filter(res => res !== null && res.length > 0),
         debounceTime(1000),
-        switchMap(value => this.stockService.searchStock(value)))
+        switchMap(value => this.stockService.searchStock(value))
+      )
       .subscribe(data => {
         if (data == undefined) this.filteredStock = [];
         else this.filteredStock = data;
@@ -106,79 +124,52 @@ export class IngredientAddComponent implements OnInit {
     this.filteredStock = [];
   }
 
+  addRow() {
+    this.rowList.push({ stock: { id: undefined, name: '', quantity: undefined }, quantityUsed: undefined })
+  }
+
   save() {
-    if (this.ingredientId) {
-      let dish: Dish = this.selectedDish;
-      let stock: Stock = this.selectedStock;
-      let ingredient: Ingredient = {
-        dish: dish,
-        item: [
-          {
-            stock: stock,
-            quantityUsed: this.qtyUsed
-          }
-        ]
-      }
-      console.log(ingredient)
-      this.ingredientService.updateIngredient(ingredient).subscribe(
-        response => {
-          this.router.navigate(["ingredient-list"])
-        },
-        error => console.log(error),
-        () => this.loading = false,
-      );
-    }
-    else {
-      let dish: Dish = this.selectedDish;
-      let stock: Stock = this.selectedStock;
-      let ingredient: Ingredient = {
-        dish: dish,
-        item: [
-          {
-            stock: stock,
-            quantityUsed: this.qtyUsed
-          }
-        ]
-      }
-      console.log(ingredient)
-      this.ingredientService.addIngredient(ingredient).subscribe(
-        response => {
-          this.router.navigate(["ingredient-list"])
-        },
-        error => console.log(error),
-        () => this.loading = false,
-      );
-    }
+    let payload: any;
     // if (this.ingredientId) {
-    //   let payload: Ingredient = {
-    //     ingredientId: this.ingredientId,
-    //     dish: this.form.value.dish,
-    //     stocks: [],
+    //   payload = {
+    //     id:this.ingredientId,
+    //     dish: this.selectedDish,
+    //     item: [
+    //       {
+    //         stock: this.selectedStock,
+    //         quantityUsed: this.qtyUsed,
+    //       },
+    //     ],
     //   };
-    //   this.loading = true;
-
-    //   this.stockService.updateStock({}).subscribe(
+    //   this.ingredientService.addIngredient(payload).subscribe(
     //     response => {
-    //       this.router.navigate(["stock-list"])
+    //       console.log(response)
+    //       this.router.navigate(["ingredient-list"])
     //     },
     //     error => console.log(error),
     //     () => this.loading = false,
     //   );
     // }
-    // else {
-    //   let payload: Stock = {
-    //     name: this.form.value.name,
-    //     quantity: this.form.value.quantity,
-    //   };
-    //   this.loading = true;
-
-    //   this.stockService.addStock(payload).subscribe(
-    //     response => {
-    //       this.router.navigate(["stock-list"])
-    //     },
-    //     error => console.log(error),
-    //     () => this.loading = false,
-    //   );
-    // }
+    let items: any[] = [];
+    this.rowList.forEach(ele => {
+      items.push(
+        {
+          stock: ele.stock,
+          quantityUsed: ele.quantityUsed
+        }
+      )
+    })
+    payload = {
+      dish: this.selectedDish,
+      item: items,
+    };
+    this.ingredientService.addIngredient(payload).subscribe(
+      response => {
+        console.log(response)
+        this.router.navigate(["ingredient-list"])
+      },
+      error => console.log(error),
+      () => this.loading = false,
+    );
   }
 }

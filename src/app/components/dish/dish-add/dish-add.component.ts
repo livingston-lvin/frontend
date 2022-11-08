@@ -23,9 +23,10 @@ export class DishAddComponent implements OnInit {
 
   dishId!: number;
 
+  img: string = "";
+
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private dishService: DishService) {
     this.dishId = route.snapshot.params["dishId"];
-    console.log(this.dishId)
   }
 
   ngOnInit(): void {
@@ -41,6 +42,7 @@ export class DishAddComponent implements OnInit {
       this.dishService.getDish(this.dishId).subscribe(
         response => {
           let dish: Dish = response;
+          this.img = response.image;
           this.form.patchValue({
             name: dish.name,
             price: dish.price,
@@ -51,6 +53,10 @@ export class DishAddComponent implements OnInit {
         () => this.loading = false,
       );
     }
+  }
+
+  clearImage() {
+    this.img = "";
   }
 
   validate() {

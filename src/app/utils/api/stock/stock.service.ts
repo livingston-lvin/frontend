@@ -38,4 +38,8 @@ export class StockService {
   getStockByRange(offset:number,size:number): Observable<any> {
     return this.http.get<any>(`${this.url}/get/${offset}/${size}`);
   }
+
+  getStockCount(): Observable<number> {
+    return this.http.get<number>(`${this.url}/getCount`);
+  }
 }

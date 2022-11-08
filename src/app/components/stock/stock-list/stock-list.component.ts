@@ -12,20 +12,32 @@ export class StockListComponent implements OnInit {
   displayedColumns: string[] = ['sno', 'name', 'price', 'actions'];
   dataSource!: StockDataSource;
 
-  pageSize:number = 5;
-  pageSizeArray:number[] = [5, 10]
+  rowLength: number = 0;
+  offset: number = 0;
+  pageSize: number = 5;
+  pageSizeArray: number[] = [5, 10]
+  rowId: number = 0;
+
   constructor(private stockService: StockService, private router: Router) { }
 
   ngOnInit(): void {
     this.dataSource = new StockDataSource(this.stockService);
     this.dataSource.loadStocks(0,5);
+    this.getSerialNo();
+    this.dataSource.stockCountSubject.subscribe(count=>this.rowLength=count)
+  }
+
+  getSerialNo() {
+    const startIndex = this.offset * this.pageSize;
+    this.rowId = startIndex + 1;
   }
 
   onChangePage(page: any) {
-    console.log(page)
-    let offset = page.pageIndex;
-    let size = page.pageSize;
-    this.dataSource.loadStocks(offset,size);
+    this.offset = page.pageIndex;
+    this.pageSize = page.pageSize;
+    this.dataSource.loadStocks(this.offset, this.pageSize);
+    this.getSerialNo();
+
   }
 
   add() {
@@ -39,14 +51,14 @@ export class StockListComponent implements OnInit {
   delete(id: number) {
     this.stockService.deleteStock(id).subscribe(
       response => {
-        this.load();
+        this.loadStocks();
       },
       error => console.log(error),
     );
   }
 
-  load() {
-    this.dataSource.loadStocks(0,5);
+  loadStocks() {
+    this.dataSource.loadStocks(this.offset, this.pageSize);
   }
 
 }

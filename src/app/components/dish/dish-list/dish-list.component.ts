@@ -1,6 +1,6 @@
 import { DishDataSource } from './../../../utils/datasource/dish.datastore';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DishService } from 'src/app/utils/api/dish/dish.service';
 
 @Component({
@@ -12,22 +12,32 @@ export class DishListComponent implements OnInit {
   displayedColumns: string[] = ['sno', 'name', 'price', 'actions'];
   dataSource!: DishDataSource;
 
-  pageSize:number = 5;
-  pageSizeArray:number[] = [5, 10]
-  offset:number = 0;
-  size:number = 0;
+  rowLength: number = 0;
+  offset: number = 0;
+  pageSize: number = 5;
+  pageSizeArray: number[] = [5, 10]
+  rowId: number = 0;
 
   constructor(private dishService: DishService, private router: Router) { }
 
   ngOnInit(): void {
     this.dataSource = new DishDataSource(this.dishService);
-    this.dataSource.loadDishes(0,5);
+    this.dataSource.loadDishes(0, 5);
+    this.getSerialNo();
+    this.dataSource.dishCountSubject.subscribe(count => this.rowLength = count)
+  }
+
+  getSerialNo() {
+    const startIndex = this.offset * this.pageSize;
+    this.rowId = startIndex + 1;
   }
 
   onChangePage(page: any) {
     this.offset = page.pageIndex;
-    this.size = page.pageSize;
-    this.dataSource.loadDishes(this.offset,this.size);
+    this.pageSize = page.pageSize;
+    this.dataSource.loadDishes(this.offset, this.pageSize);
+    this.getSerialNo();
+
   }
 
   addDish() {
@@ -35,7 +45,6 @@ export class DishListComponent implements OnInit {
   }
 
   editDish(dishId: number) {
-    console.log(dishId)
     this.router.navigate(["dish-add", dishId])
   }
 
@@ -49,7 +58,7 @@ export class DishListComponent implements OnInit {
   }
 
   loadDishes() {
-    this.dataSource.loadDishes(this.offset,this.size);
+    this.dataSource.loadDishes(this.offset, this.pageSize);
   }
 
 }

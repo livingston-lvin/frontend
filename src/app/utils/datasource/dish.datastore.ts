@@ -5,6 +5,7 @@ import { Dish } from "../interface/dish.interface";
 
 export class DishDataSource extends DataSource<Dish>{
   private dishSubject = new BehaviorSubject<Dish[]>([]);
+  dishCountSubject = new BehaviorSubject<number>(0);
 
   constructor(private dishService: DishService) {
     super();
@@ -16,13 +17,13 @@ export class DishDataSource extends DataSource<Dish>{
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dishSubject.complete();
+    this.dishCountSubject.complete();
   }
 
   loadDishes(offset: number, size: number) {
-    this.dishService.getDishedByRange(offset,size).subscribe(
-      response =>{
-        this.dishSubject.next(response.content)}
-    )
+    this.dishService.getDishCount().subscribe(count => this.dishCountSubject.next(count))
+    this.dishService.getDishedByRange(offset, size).subscribe(
+      response => this.dishSubject.next(response.content))
   }
 
 }

@@ -1,4 +1,7 @@
-<button type="button" class="firstBtn" mat-flat-button color="primary" (click)="add()">Add Ingredient</button>
+<div class="topNav">
+  <mat-paginator [length]="rowLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeArray" class="mat-paginator-container" (page)="onChangePage($event)"></mat-paginator>
+  <button type="button" class="firstBtn" mat-flat-button color="primary" (click)="add()">Add Recipe</button>
+</div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <ng-container matColumnDef="sno">
     <th mat-header-cell *matHeaderCellDef> S.No </th>
